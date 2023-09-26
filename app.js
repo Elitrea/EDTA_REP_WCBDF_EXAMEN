@@ -12,7 +12,7 @@ const puerto = process.env.PORT || 3000;
 
 app.use(express.json());
 
-//Arreglo de objeto de categorias
+//Arreglo de objeto de productos
 let productos = [
     {id: 1, nombre: "Cuaderno", cantidad: 5, precioCompra: 35.99, precioVenta: 55.99},
     {id: 2, nombre: "Lapicera", cantidad: 7, precioCompra: 12.99, precioVenta: 34.99},
@@ -46,11 +46,10 @@ app.get('/socios/v1/productos', (req,res)=>{
 });
 
 app.get('/socios/v1/productos/:id', (req,res)=>{
-    //Se muestra una categoria
+    //Se muestra un producto
     const id = req.params.id;
-    //Programación funcional - No se establece el cómo, solo el qué
     const producto = productos.find(producto =>producto.id == id);
-    //Sí se econtró una categoria
+    //Sí se encontró un producto
     if (producto) {
         res.status(200).json({
             estado : 1,
@@ -58,7 +57,7 @@ app.get('/socios/v1/productos/:id', (req,res)=>{
             producto : producto
         });
     } else {
-        //No se encontró una categoria
+        //No se encontró un producto
         res.status(404).json({
             estado:0,
             mensaje:"No se encontró el producto",
@@ -117,32 +116,35 @@ app.put('/socios/v1/productos/:id', (req, res) => {
     // Recuperar los datos enviados por el usuario en el cuerpo de la solicitud
     const { nombre, cantidad, precioCompra, precioVenta } = req.body;
 
-    // Buscar la categoría existente por su ID
+    // Buscar el producto existente por su ID
     const productoExistente = productos.find(producto => producto.id === id);
 
     if (!productoExistente) {
-        // Si no se encuentra la categoría, responder con un estado 404 (No encontrado)
+        // Si no se encuentra el producto, responder con un estado 404 (No encontrado)
         res.status(404).json({
             estado: 0,
             mensaje: "No se encontró un producto para actualizar",
             producto: {}
         });
     } else {
-        // Si se encuentra la categoría, actualizar los datos
+        // Si se encuentra el producto, actualizar los datos
         if (nombre !== undefined) {
             productoExistente.nombre = nombre;
         }
-
-        if (cantidad !== undefined) {
+        else if (cantidad !== undefined) {
             productoExistente.cantidad = cantidad;
         }
-
-        if (precioCompra !== undefined) {
+        else if (precioCompra !== undefined) {
             productoExistente.precioCompra = precioCompra;
         }
-
-        if (precioVenta !== undefined) {
+        else if (precioVenta !== undefined) {
             productoExistente.precioVenta = precioVenta;
+        }else{
+            res.status(204).json({
+                estado: 0,
+                mensaje: "No se ha actualizado ningún elemento",
+                producto: productoExistente
+            });
         }
 
         res.status(200).json({
@@ -154,21 +156,21 @@ app.put('/socios/v1/productos/:id', (req, res) => {
 });
 
 app.delete('/socios/v1/productos/:id', (req, res) => {
-    // Eliminar un recurso del servidor - Eliminar una categoria
+    // Eliminar un recurso del servidor - Eliminar un producto
     const id = parseInt(req.params.id);
 
-    // Buscar la categoría por su ID
+    // Buscar el producto por su ID
     const indiceProducto = productos.findIndex(producto => producto.id === id);
 
     if (indiceProducto === -1) {
-        // Si no se encuentra la categoría, responder con un estado 404 (No encontrado)
+        // Si no se encuentra el producto, responder con un estado 404 (No encontrado)
         res.status(404).json({
             estado: 0,
             mensaje: "No se encontró el producto para eliminar",
             producto: {}
         });
     } else {
-        // Si se encuentra la categoría, eliminarla del arreglo
+        // Si se encuentra el producto, eliminarla del arreglo
         const productoEliminado = productos.splice(indiceProducto, 1);
 
         res.status(200).json({
