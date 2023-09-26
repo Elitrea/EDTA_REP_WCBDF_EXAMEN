@@ -175,7 +175,7 @@ app.delete('/socios/v1/productos/:id', (req, res) => {
 
         res.status(200).json({
             estado: 1,
-            mensaje: "Categoría eliminada correctamente",
+            mensaje: "Producto eliminado correctamente",
             producto: productoEliminado
         });
     }
