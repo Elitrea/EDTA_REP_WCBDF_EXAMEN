@@ -140,7 +140,7 @@ app.put('/socios/v1/productos/:id', (req, res) => {
         else if (precioVenta !== undefined) {
             productoExistente.precioVenta = precioVenta;
         }else{
-            res.status(204).json({
+            res.status(404).json({
                 estado: 0,
                 mensaje: "No se ha actualizado ningún elemento",
                 producto: productoExistente
