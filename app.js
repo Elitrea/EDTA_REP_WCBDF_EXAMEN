@@ -131,15 +131,16 @@ app.put('/socios/v1/productos/:id', (req, res) => {
         if (nombre !== undefined) {
             productoExistente.nombre = nombre;
         }
-        else if (cantidad !== undefined) {
+        if (cantidad !== undefined) {
             productoExistente.cantidad = cantidad;
         }
-        else if (precioCompra !== undefined) {
+        if (precioCompra !== undefined) {
             productoExistente.precioCompra = precioCompra;
         }
-        else if (precioVenta !== undefined) {
+        if (precioVenta !== undefined) {
             productoExistente.precioVenta = precioVenta;
-        }else{
+        }
+        if(nombre == undefined || cantidad == undefined || precioCompra == undefined || precioVenta == undefined){
             res.status(404).json({
                 estado: 0,
                 mensaje: "No se ha actualizado ningún elemento",
